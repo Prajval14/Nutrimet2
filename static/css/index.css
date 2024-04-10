@@ -35,7 +35,7 @@
     background-image: url('https://images.stockcake.com/public/e/0/0/e0059a2a-ef86-4fe0-b92c-095a6eb6ddc7_large/hydration-workout-essential-stockcake.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    height: 600px;    
+    height: 600px;
 }
 
 #row5_content {
@@ -80,17 +80,12 @@
 }
 
 #add_to_cart_button {
-    background-color: #054F98;    
+    background-color: #054F98;
 }
 
 #add_to_cart_button.added {
     background-color: #94BF9D;
     color: black;
-}
-
-/* Media query for screens with a minimum width of 768 pixels and a maximum of 1023 pixels (typical for tablets) */
-@media only screen and (min-width: 768px) and (max-width: 1024px) {
-
 }
 
 /* Media query for screens with a minimum width of 1024 pixels (typical for desktops) */
@@ -113,7 +108,7 @@
         margin: 1.5rem;
         border-radius: 10px;
     }
-    
+
     #row2_col3 {
         display: flex;
     }
@@ -121,7 +116,7 @@
     #row3 i, #row4 i, #row6 i {
         display: none;
     }
-    
+
     #row5 {
         background-image: url('https://images.stockcake.com/public/a/2/0/a20742d0-abc3-4890-a546-efa5b48bfd7f/gym-hydration-essential-stockcake.jpg');
     }
