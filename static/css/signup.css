@@ -112,7 +112,7 @@
 }
 
 .leftimage {
-    background-image: url('../media/images/signup_page.jpg');
+    background-image: url('../../static/images/signup_page.jpg');
     background-size: cover;
     background-position: center;
 }
@@ -186,7 +186,7 @@ input:hover {
 #logo {
     width: 100%;
     height: 50px;
-    background-image: url('../media/images/logo/main.png');
+    background-image: url('../../static/images/logo/main.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
