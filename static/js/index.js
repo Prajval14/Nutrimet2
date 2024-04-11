@@ -1,5 +1,5 @@
 // Importing data from data.js file
-import { gym_data_list, yoga_data_list, supplements_data_list } from './data.js';
+// import { gym_data_list, yoga_data_list, supplements_data_list } from './data.js';
 
 //Declaring constants for html elements and data
 const gymContainer = document.getElementById('gym_data_container');
@@ -63,8 +63,8 @@ document.getElementById('supplement_left').addEventListener("click", () => handl
 document.getElementById('supplement_right').addEventListener("click", () => handleNavigation(1, 'supplements', discountedSupplementProducts, supplementsContainer));
 
 // Handling navbar cart and sign up on click event
-document.getElementById('nav_cart_button').addEventListener("click", () => window.location.href = './html/cart.html?index_page_selected_products=' + JSON.stringify(myCart));
-document.getElementById('nav_login_button').addEventListener("click", () => toggleValidation());
+// document.getElementById('nav_cart_button').addEventListener("click", () => window.location.href = './html/cart.html?index_page_selected_products=' + JSON.stringify(myCart));
+// document.getElementById('nav_login_button').addEventListener("click", () => toggleValidation());
 
 document.getElementById('search_input').addEventListener("keypress", (event) => {
     if (event.keyCode === 13) {
@@ -168,12 +168,12 @@ function addProductToCart(event) {
 }
 
 //Urvesh Patel
-function toggleValidation() {
-    var isValid = sessionStorage.getItem("isValid");
-    // If isValid is null or false, redirect to signup.html
-    if (!isValid || isValid === "false") {
-        window.location.href = './html/signup.html';
-    } else {
-        window.location.href = './html/details.html';
-    }
-}
+// function toggleValidation() {
+//     var isValid = sessionStorage.getItem("isValid");
+//     // If isValid is null or false, redirect to signup.html
+//     if (!isValid || isValid === "false") {
+//         window.location.href = './html/signup.html';
+//     } else {
+//         window.location.href = './html/details.html';
+//     }
+// }

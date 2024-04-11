@@ -83,17 +83,16 @@
                 <button type="submit" class="btn btn-primary btn-block form-control bagcolor">Create Account</button>
               </form>
             </div>
-            <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel"
+            <div class="modal fade" id="popOver" tabindex="-1" aria-labelledby="popOverLabel"
               aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Success!</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                      onclick="closebutton()"></button>
+                    <h5 class="modal-title" id="popOverLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="popover-close"></button>
                   </div>
                   <div class="modal-body">
-                    Registration successful! Your registration was successful. Thank you!
+                    <p id="popover-message"></p>
                   </div>
                 </div>
               </div>

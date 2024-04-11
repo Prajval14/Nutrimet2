@@ -113,68 +113,116 @@ function validateForms() {
 
   var isError = false;
   isError = errorValidate(isError);
+
   if(isError)
   {
-    var userId = document.getElementById("email").value;
-    var passWordId = document.getElementById("password").value;
-    sessionStorage.setItem("userName_R", userId);
-    sessionStorage.setItem("password_R", passWordId);
-    sessionStorage.setItem("f_name", f_Name);
-    sessionStorage.setItem("l_name", l_Name);
-    var myModal = new bootstrap.Modal(
-      document.getElementById("successModal"),
-      {}
-    );
-    myModal.show();
+    // Send the data in the fetch request
+    var signinDetails = {
+      first_name: f_Name,
+      last_name: l_Name,
+      email: email.value,
+      password: password.value
+    };
+    
+    fetch('/signup', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'X-Request-Type': 'signup'
+      },
+      body: JSON.stringify(signinDetails)
+    })
+    .then(response => response.json())
+    .then(data => {
+      
+      if(!data.signup_success) {
+        document.getElementById('popOverLabel').innerHTML = 'Failed!';
+        document.getElementById('popover-message').innerHTML = 'Registration Un-successful! Try Again!';
+      } else {
+        document.getElementById('popOverLabel').innerHTML = 'Success!';
+        document.getElementById('popover-message').innerHTML = 'Registration successful! Your registration was successful. Thank you!';
+        document.getElementById('popover-close').addEventListener('click', () => {
+          toggleForms("loginForm");
+        });
+      }
+      var myModal = new bootstrap.Modal(
+        document.getElementById("popOver"),
+        {}
+      );
+      myModal.show();
+    })
+    .catch(error => console.error('Error:', error));
   }
- 
-
   return false;
 }
+
 function closebutton() {
   toggleForms("loginForm");
   document.getElementById("form-data").reset();
 }
 
 function loginValidation() {
-  var userName = document.getElementById("loginEmail").value;
-  var l_Password = document.getElementById("loginPassword").value;
-
-  var R_Id = sessionStorage.getItem("userName_R");
-  var R_Pass = sessionStorage.getItem("password_R");
-
-  if (R_Id == userName && l_Password == R_Pass) {
-    window.location.href = "../index.html";
-    sessionStorage.setItem("isValid", true);
-  } else {
-    if (userName === '') {
-      document.getElementById('loginError').innerText = 'Please enter your Email';
-      errors = true;
-  } 
-    else if(userName != R_Id)
-    {
-      document.getElementById('loginError').innerText = 'UserName Not Found!!!';
-      errors = true;
-    }
-    else {
-      document.getElementById('loginError').innerText = '';
-    }
+  debugger
+  var email = document.getElementById("loginEmail").value;
+  var password = document.getElementById("loginPassword").value;
+  var isError = false;
   
-    if(l_Password === '')
-    {
-      document.getElementById('passError').innerText = 'Please enter your Password';
-      errors = true;
-    }
-    else if (l_Password != R_Pass )
-    {
-      document.getElementById('passError').innerText = 'Wrong Password!!!';
-      return false;
-    }
-    else {
-      document.getElementById('passError').innerText = '';
-    }
+  if (email === '') {
+    document.getElementById('loginError').innerText = 'Please enter your email';
+    isError = true;
+  }
+  else {
+    document.getElementById('loginError').innerText = null;
+    isError = false;
+  }
+  if(password === '') {
+    document.getElementById('passError').innerText = 'Please enter your password';
+    isError = true;
+  }
+  else {
+    document.getElementById('passError').innerText = null;
+    isError = false;
   }
 
-
+  if(!isError)
+  {
+    // Send the data in the fetch request
+    var loginDetails = {
+      email: email,
+      password: password
+    };
+    fetch('/signup', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'X-Request-Type': 'login'
+      },
+      body: JSON.stringify(loginDetails)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.user_exists) {
+        if (data.correct_password) {
+            document.getElementById('popOverLabel').innerHTML = 'Success!';
+            document.getElementById('popover-message').innerHTML = data.message;
+            document.getElementById('popover-close').addEventListener('click', () => {
+              window.location.href = "/";
+            });
+        } else {
+            document.getElementById('popOverLabel').innerHTML = 'Failed!';
+            document.getElementById('popover-message').innerHTML = data.message;
+        }
+      } else {
+          document.getElementById('popOverLabel').innerHTML = 'Failed!';
+          document.getElementById('popover-message').innerHTML = data.message;
+      }
+      var myModal = new bootstrap.Modal(
+        document.getElementById("popOver"),
+        {}
+      );
+      myModal.show();
+    })
+    .catch(error => console.error('Error:', error));
+    }
   return false;
 }

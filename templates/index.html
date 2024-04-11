@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Favicon -->
-    <link rel="icon" href="./media/images/logo/main.png" type="image/x-icon" />
+    <link rel="icon" href="/static/images/logo/main.png" type="image/x-icon" />
     <title>Nutrimet Official Store - Health & Wellness Essentials</title>
     <!-- Bootstrap CSS | JS | Icons CDN links -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -27,10 +27,11 @@
     <!-- jQuery Reference -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- External CSS -->
-    <link href="./css/index.css" rel="stylesheet">
-    <link href="./css/common.css" rel="stylesheet">    
+    <link href="/static/css/index.css" rel="stylesheet">
+    <link href="/static/css/common.css" rel="stylesheet">
     <!-- External JS -->
-    <script type="module" src="./js/index.js"></script>
+    <script type="module" src="/static/js/common.js"></script>
+    <script type="module" src="/static/js/index.js"></script>
     <script>
         let gym_data_list = {{ gym_products | safe }};
         let yoga_data_list = {{ yoga_products | safe }};
@@ -45,8 +46,8 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg fixed-top bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand active" href="index.html">
-                <img src="./media/images/logo/main.png" alt="Nutrimet" width="50">
+            <a class="navbar-brand active" href="/">
+                <img src="/static/images/logo/main.png" alt="Nutrimet" width="50">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbar_supported_content" aria-controls="navbar_supported_content"
@@ -57,7 +58,7 @@
             <div class="collapse navbar-collapse" id="navbar_supported_content">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-bold">
                     <li class="nav-item">
-                        <a class="nav-link w-100" aria-current="page" href="./html/aboutus.html">About</a>
+                        <a class="nav-link w-100" aria-current="page" href="/aboutus">About</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link w-100 index-scroll" aria-current="page" href="#row3">Gym Accessories</a>
@@ -98,9 +99,9 @@
         </p>
         <br>
         <div class="d-flex justify-content-center align-items-center" id="row1_button">
-            <a class="btn btn-light text-black fw-bold border-0 rounded-pill" href="./html/products.html"
+            <a class="btn btn-light text-black fw-bold border-0 rounded-pill" href="/products"
                 role="button">SHOP PROTEIN BARS</a>
-            <a class="btn btn-light text-black fw-bold border-0 rounded-pill" href="./html/products.html"
+            <a class="btn btn-light text-black fw-bold border-0 rounded-pill" href="/products"
                 role="button">SHOP SUPPLEMENTS</a>
         </div>
     </div>
@@ -116,7 +117,7 @@
                 Grab your favorites now and dive deeper into your yoga journey while stocks last! Don't wait, seize the
                 savings and find your zen today!"
             </p>
-            <a class="btn btn-dark fs-5 fw-medium rounded-pill" href="./html/products.html" role="button">SHOP YOGA</a>
+            <a class="btn btn-dark fs-5 fw-medium rounded-pill" href="/products" role="button">SHOP YOGA</a>
         </div>
         <div class="col" id="row2_col3"></div>
     </div>
@@ -126,7 +127,7 @@
         <p class="fs-3 fw-bold d-inline">
             SHOP GYM EQUIPMENTS
         </p>
-        <a class="link-offset-3 ps-2" href="./html/products.html">View All</a>
+        <a class="link-offset-3 ps-2" href="/products">View All</a>
         <div class="d-flex justify-content-center align-items-center">
             <i class="bi bi-arrow-left-circle-fill fs-3 mx-3" id="gym_left"></i>
             <div class="row gx-5" id="gym_data_container"></div>
@@ -139,7 +140,7 @@
         <p class="fs-3 fw-bold d-inline">
             YOGA ACCESSORIES
         </p>
-        <a class="link-offset-3 ps-2" href="./html/products.html">View All</a>
+        <a class="link-offset-3 ps-2" href="/products">View All</a>
         <div class="d-flex justify-content-center align-items-center">
             <i class="bi bi-arrow-left-circle-fill fs-3 mx-3" id="yoga_left"></i>
             <div class="row gx-5" id="yoga_data_container"></div>
@@ -156,9 +157,9 @@
             <p class="fs-6 fw-medium">
                 Get a FREE protein shaker with purchases over $100! Elevate your gains and enjoy this exclusive offer.
             </p>
-            <a class="btn btn-light text-dark fs-5 fw-semibold rounded-pill" href="./html/products.html"
+            <a class="btn btn-light text-dark fs-5 fw-semibold rounded-pill" href="/products"
                 role="button">BUY DUMBBELLS SET</a>
-            <a class="btn btn-light text-dark fs-5 fw-semibold rounded-pill" href="./html/products.html"
+            <a class="btn btn-light text-dark fs-5 fw-semibold rounded-pill" href="/products"
                 role="button">BUY GYM BAGS</a>
         </div>
     </div>
@@ -168,7 +169,7 @@
         <p class="fs-3 fw-bold d-inline">
             SHOP SUPPLEMENTS
         </p>
-        <a class="link-offset-3 ps-2" href="./html/products.html">View All</a>
+        <a class="link-offset-3 ps-2" href="/products">View All</a>
         <div class="d-flex justify-content-center align-items-center">
             <i class="bi bi-arrow-left-circle-fill fs-3 mx-3" id="supplement_left"></i>
             <div class="row gx-5" id="supplements_data_container"></div>
@@ -179,15 +180,15 @@
     <!-- Content 7 -->
     <div class="row" id="row7">
         <div class="col d-flex align-items-end" id="row7_col1">
-            <a class="btn btn-light text-dark fs-5 fw-semibold rounded-pill" href="./html/products.html"
+            <a class="btn btn-light text-dark fs-5 fw-semibold rounded-pill" href="/products"
                 role="button">SHOP GYM</a>
         </div>
         <div class="col d-flex align-items-end" id="row7_col2">
-            <a class="btn btn-light text-dark fs-5 fw-semibold rounded-pill" href="./html/products.html"
+            <a class="btn btn-light text-dark fs-5 fw-semibold rounded-pill" href="/products"
                 role="button">SHOP YOGA</a>
         </div>
         <div class="col d-flex align-items-end" id="row7_col3">
-            <a class="btn btn-light text-dark fs-5 fw-semibold rounded-pill" href="./html/products.html"
+            <a class="btn btn-light text-dark fs-5 fw-semibold rounded-pill" href="/products"
                 role="button">SHOP SUPPLEMENTS</a>
         </div>
     </div>
@@ -230,10 +231,10 @@
         <a href="#" class="text-decoration-none">Cookie Policy</a>
         <br>
         <div class="w-100" id="payment_images">
-            <img src="./media/images/payment/visa.png">
-            <img src="./media/images/payment/mastercard.png" alt="mastercard">
-            <img src="./media/images/payment/applepay.png" alt="applepay">
-            <img src="./media/images/payment/paypal.png" alt="paypal">
+            <img src="/static/images/payment/visa.png">
+            <img src="/static/images/payment/mastercard.png" alt="mastercard">
+            <img src="/static/images/payment/applepay.png" alt="applepay">
+            <img src="/static/images/payment/paypal.png" alt="paypal">
         </div>
         <br>
         <div class="bg-body-tertiary">
