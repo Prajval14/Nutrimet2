@@ -1,10 +1,6 @@
-// Importing data from data.js file
-// import { gym_data_list, yoga_data_list, supplements_data_list } from './data.js';
-
 //Declaring constants for html elements and data
 const gymContainer = document.getElementById('gym_data_container');
 const yogaContainer = document.getElementById('yoga_data_container');
-const footerYear = document.getElementById('current_Year');
 const supplementsContainer = document.getElementById('supplements_data_container');
 const cartBadge = document.getElementById('cart_items_badge');
 const navbarBadge = document.getElementById('navbar_toggler_icon_badge');
@@ -35,6 +31,9 @@ document.addEventListener('DOMContentLoaded', function () {
         discountedSupplementProducts.forEach(data => createCards(data, supplementsContainer));
     }
 
+    //Setting up add to cart button after all cards are rendered
+    handleAddToCart();
+
     // Add event listeners to the navigation links
     document.querySelectorAll('.index-scroll').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -49,9 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //Setting up add to cart button after all cards are rendered
     handleAddToCart();
-
-    //Setting dynamic year value in footer
-    footerYear.innerHTML = new Date().getFullYear();
 });
 
 //Handling left right click event listeners for card in mobile viewport
@@ -63,8 +59,7 @@ document.getElementById('supplement_left').addEventListener("click", () => handl
 document.getElementById('supplement_right').addEventListener("click", () => handleNavigation(1, 'supplements', discountedSupplementProducts, supplementsContainer));
 
 // Handling navbar cart and sign up on click event
-// document.getElementById('nav_cart_button').addEventListener("click", () => window.location.href = './html/cart.html?index_page_selected_products=' + JSON.stringify(myCart));
-// document.getElementById('nav_login_button').addEventListener("click", () => toggleValidation());
+document.getElementById('nav_cart_button').addEventListener("click", () => window.location.href = './html/cart.html?index_page_selected_products=' + JSON.stringify(myCart));
 
 document.getElementById('search_input').addEventListener("keypress", (event) => {
     if (event.keyCode === 13) {
@@ -166,14 +161,3 @@ function addProductToCart(event) {
     }
     cartBadge.innerHTML = myCart.length;
 }
-
-//Urvesh Patel
-// function toggleValidation() {
-//     var isValid = sessionStorage.getItem("isValid");
-//     // If isValid is null or false, redirect to signup.html
-//     if (!isValid || isValid === "false") {
-//         window.location.href = './html/signup.html';
-//     } else {
-//         window.location.href = './html/details.html';
-//     }
-// }
