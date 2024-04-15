@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, redirect, url_for, render_template, session , jsonify
 import sqlite3
 import json
 import os
@@ -12,8 +12,6 @@ database_file = os.path.join(current_directory, database_relative_path)
 
 # Declaring variables for session
 products = []
-user_login_status = False
-login_user_email = ''
 
 class Product:
     def __init__(self, productid, productname, productdetail, originalprice, discountPrice, isondiscount, imageURL, rating, totalquantity, category):
@@ -81,8 +79,6 @@ def user_signup(user):
         return False
 
 def user_login(user_input_email, user_input_password):
-    global user_login_status, login_user_email
-
     connection = sqlite3.connect(database_file)
     cursor = connection.cursor()
     cursor.execute('SELECT email, password FROM t_users WHERE email = ?', (user_input_email,))
@@ -98,8 +94,7 @@ def user_login(user_input_email, user_input_password):
         if user[1] == user_input_password:
             correct_password = True
             message = "Login successful."
-            user_login_status = True
-            login_user_email = user[0]
+            session['login_user_email'] = user[0]
         else:
             message = "Incorrect password."
     else:
@@ -118,21 +113,26 @@ def get_user_by_id(user_id):
     return None
 
 def user_update(password=None, address=None, mobile=None):
-    global login_user_email
-
+    login_email = session.get('login_user_email', None)
     try:
         connection = sqlite3.connect(database_file)
         cursor = connection.cursor()
         if password:
-            cursor.execute("UPDATE t_users SET password = ? WHERE email = ?", (password, login_user_email))
+            cursor.execute("UPDATE t_users SET password = ? WHERE email = ?", (password, login_email))
             connection.commit()
 
         if address:
-            cursor.execute("UPDATE t_users SET address = ? WHERE email = ?", (address, login_user_email))
+            if address == 'remove':
+                cursor.execute("UPDATE t_users SET address = '' WHERE email = ?", (login_email,))
+            else:
+                cursor.execute("UPDATE t_users SET address = ? WHERE email = ?", (address, login_email))
             connection.commit()
 
         if mobile:
-            cursor.execute("UPDATE t_users SET mobile = ? WHERE email = ?", (mobile, login_user_email))
+            if mobile == 'remove':
+                cursor.execute("UPDATE t_users SET mobile = '' WHERE email = ?", (login_email,))
+            else:
+                cursor.execute("UPDATE t_users SET mobile = ? WHERE email = ?", (mobile, login_email))
             connection.commit()
         connection.close()
 
@@ -148,18 +148,17 @@ def get_json_data(objects_list):
     return json_data
 
 app = Flask(__name__)
+app.secret_key = 'session_nutrimet'
 
 @app.route('/', methods=['GET'])
 def index():
-    global user_login_status, login_user_email
     request_type = request.headers.get('X-Request-Type')
-
     if request_type == 'logout':
-        print('1')
-        print(user_login_status, login_user_email)
-        user_login_status = False
-        login_user_email = ''
-        return render_template('index.html')
+        session.pop('login_user_email', None)
+        if(session.get('login_user_email', None) == None):
+            return jsonify({'logout_success': True})
+        else:
+            return jsonify({'logout_success': False})
     else:
         gym_products = get_products('gym')
         yoga_products = get_products('yoga')
@@ -167,19 +166,21 @@ def index():
         return render_template('index.html',
                             gym_products=get_json_data(gym_products),
                             yoga_products=get_json_data(yoga_products),
-                            supplements_products=get_json_data(supplements_products),
-                            user_login_status = user_login_status,
-                            login_user_email = login_user_email)
+                            supplements_products=get_json_data(supplements_products))
 
 @app.route('/aboutus', methods=['GET'])
 def aboutus():
     return render_template('/html/aboutus.html')
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    login_email = session.get('login_user_email', None)
     if request.method == 'GET':
-        # Render the signup page
-        return render_template('/html/signup.html')
+        user_info = get_user_by_id(login_email)
+        if user_info:
+            return render_template('/html/details.html', user_info=get_json_data([user_info]))
+        else:
+            return render_template('/html/signup.html')
     elif request.method == 'POST':
         request_type = request.headers.get('X-Request-Type')
         data = request.json
@@ -187,32 +188,21 @@ def signup():
         last_name = data.get('last_name')
         email = data.get('email')
         password = data.get('password')
+        address = data.get('address')
+        mobile = data.get('mobile')
         if request_type == 'signup':
             new_user = User(first_name, last_name, email, password, address="", mobile="")
             signup_success = user_signup(new_user)
             return jsonify({'signup_success': signup_success})
-        else:
+        elif request_type == 'updateuser':
+            update_success, message = user_update(password, address, mobile)
+            return jsonify({'update_success': update_success, 'message': message})
+        elif request_type == 'login':
             user_exists, correct_password, message = user_login(email, password)
             response = {'user_exists': user_exists, 'correct_password': correct_password, 'message': message}
             return jsonify(response)
-
-@app.route('/profile/<user_id>', methods=['GET', 'POST'])
-def user_detail(user_id):
-    if request.method == 'GET':
-        #Render the user detail page
-        user_info = get_user_by_id(user_id)
-        if user_info:
-            return render_template('/html/details.html', user_info=get_json_data([user_info]))
-        return 'User not found', 404
-    elif request.method == 'POST':
-        request_type = request.headers.get('X-Request-Type')
-        data = request.json
-        password = data.get('password')
-        address = data.get('address')
-        mobile = data.get('mobile')
-        if request_type == 'updateuser':
-            update_success, message = user_update(password, address, mobile)
-            return jsonify({'update_success': update_success, 'message': message})
+        else:
+            return jsonify({'error': 'Invalid request type'})
 
 @app.route('/products', methods=['GET'])
 def products():
