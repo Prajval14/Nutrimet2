@@ -10,11 +10,9 @@ current_directory = os.path.dirname(os.path.abspath(__file__))
 database_relative_path = 'database/nutrimet_db.db'
 database_file = os.path.join(current_directory, database_relative_path)
 
-# Declaring variables for session
-products = []
-
 class Product:
     def __init__(self, productid, productname, productdetail, originalprice, discountPrice, isondiscount, imageURL, rating, totalquantity, category):
+        self.items = []
         self.productid = productid
         self.productname = productname
         self.productdetail = productdetail
@@ -38,10 +36,25 @@ class Cart:
         self.items = []
 
     def add_to_cart(self, product):
+        # Add product to cart
         self.items.append(product)
+        try:
+            # Update stock quantity in DB 
+            connection = sqlite3.connect(database_file)
+            cursor = connection.cursor()
+            cursor.execute('UPDATE t_products SET c_quantity = c_quantity - 1 WHERE c_productid = ?', (product,))
+            connection.commit()
+            cursor.execute('SELECT c_quantity FROM t_products WHERE c_productid = ?', (product,))
+            updated_quantity = cursor.fetchone()[0]
+            return updated_quantity
+        except Exception as e:
+            print(f"Error occurred: {str(e)}")
+        finally:
+            connection.close()
 
     def remove_from_cart(self, product):
         self.items.remove(product)
+        product.totalquantity += 1
 
     def get_cart_total(self):
         return sum([item.discountPrice for item in self.items])
@@ -150,7 +163,7 @@ def get_json_data(objects_list):
 app = Flask(__name__)
 app.secret_key = 'session_nutrimet'
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     request_type = request.headers.get('X-Request-Type')
     if request_type == 'logout':
@@ -159,6 +172,13 @@ def index():
             return jsonify({'logout_success': True})
         else:
             return jsonify({'logout_success': False})
+    elif request_type == 'addtocart':
+        product = request.json
+        try:
+            in_stock = cart.add_to_cart(product)
+            return jsonify({'addtocart_success': True, 'in_stock': in_stock})
+        except Exception as e:
+            return jsonify({'addtocart_success': False, 'error': str(e)})
     else:
         gym_products = get_products('gym')
         yoga_products = get_products('yoga')
@@ -218,14 +238,19 @@ def product_detail(product_id):
         return render_template('/html/productdetails.html', product=get_json_data([product]))
     return 'Product not found', 404
 
-@app.route('/add_to_cart', methods=['POST'])
-def add_to_cart():
-    product_id = request.form.get('product_id')
-    product = get_product_by_id(product_id)
-    if product:
-        cart.add_to_cart(product)
-        return 'Product added to cart successfully'
-    return 'Product not found', 404
+@app.route('/mycart', methods=['GET', 'POST'])
+def mycart():
+    if request.method == 'GET':
+        if(len(cart.items) > 0):
+            return render_template('/html/cart.html', cart_items=cart.items)
+        else:
+            return jsonify({'is_cart_empty': True})
+    elif request.method == 'POST':
+        data = request.json
+        cart.items = data
+        return render_template('/html/cart.html')
+    else:
+        return 'Invalid request method', 400
 
 if __name__ == '__main__':
     cart = Cart()
