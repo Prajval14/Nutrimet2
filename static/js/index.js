@@ -2,15 +2,12 @@
 const gymContainer = document.getElementById('gym_data_container');
 const yogaContainer = document.getElementById('yoga_data_container');
 const supplementsContainer = document.getElementById('supplements_data_container');
-const cartBadge = document.getElementById('cart_items_badge');
-const navbarBadge = document.getElementById('navbar_toggler_icon_badge');
 
 const discountedGymProducts = gym_data_list.filter(product => product.isondiscount);
 const discountedYogaProducts = yoga_data_list.filter(product => product.isondiscount);
 const discountedSupplementProducts = supplements_data_list.filter(product => product.isondiscount);
 
 //Declaring empty arrays to send data to add to cart page
-const instanceCart = [];
 const myCart = [];
 
 //Defining index of data cards to render on front page
@@ -45,9 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
-
-    //Setting up add to cart button after all cards are rendered
-    handleAddToCart();
 });
 
 //Handling left right click event listeners for card in mobile viewport
@@ -59,7 +53,21 @@ document.getElementById('supplement_left').addEventListener("click", () => handl
 document.getElementById('supplement_right').addEventListener("click", () => handleNavigation(1, 'supplements', discountedSupplementProducts, supplementsContainer));
 
 // Handling navbar cart and sign up on click event
-document.getElementById('nav_cart_button').addEventListener("click", () => window.location.href = './html/cart.html?index_page_selected_products=' + JSON.stringify(myCart));
+// document.getElementById('nav_cart_button').addEventListener("click", () => {
+//     if(myCart.length > 0){
+//         fetch('/mycart', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify(myCart)
+//         }).then(response => response.json())
+//         .then(data => {
+//             console.log(data);
+//         })
+//         .catch(error => console.error('Error:', error));
+//     }
+// });
 
 document.getElementById('search_input').addEventListener("keypress", (event) => {
     if (event.keyCode === 13) {
@@ -78,12 +86,13 @@ function createCards(data, container) {
             <img src="${data.imageURL}" id="product_image_${data.productid}" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="product-id d-none">${data.productid}</h5>
-                <h5 class="total-quantity d-none">${data.total_quantity}</h5>
                 <h5 class="card-title">${data.productname}</h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary" style="height: 50px">${data.productdetail}</h6>
                 <p class="card-text">
                 <span class="text-decoration-line-through text-secondary fw-light">$${data.originalprice}</span>
                 <span class="fw-bold text-danger ps-1 fs-5">$${data.discountPrice}</span>
+                <br>
+                In Stock: <span class="total-quantity text-secondary">${data.totalquantity}</span>
                 </p>
             </div>
             <div class="card-footer">
@@ -91,11 +100,21 @@ function createCards(data, container) {
             </div>
         </div>
     `;
+    
     container.appendChild(cardDiv);
+
+    if(data.totalquantity <= 0) {
+        $('#add_to_cart_button').attr({
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'data-bs-title': 'Out of Stock'
+        });
+        $('#add_to_cart_button').tooltip();
+    }
 
     //Handling on click event for product images - navigate to product details page
     document.getElementById(`product_image_${data.productid}`).addEventListener("click", (event) => {
-        window.location.href = `./html/productdetails.html?selected_product=${JSON.stringify(data.productid)}`;
+        window.location.href = '/product/' + data.productid;
     });
 }
 
@@ -136,10 +155,9 @@ function addProductToCart(event) {
     const productID = event.target.closest('.card').querySelector('.product-id').textContent;
     const productQuantity = event.target.closest('.card').querySelector('.total-quantity').textContent;
     const button = event.target;
-    instanceCart.push(productID);
-    const productCount = myCart.filter(item => item === productID).length;
-    // Validating add to cart with actual product's stock
-    if (productCount >= productQuantity) {
+
+    if(productQuantity <= 0) {
+        window.alert('Out of Stock');
         $(button).attr({
             'data-bs-toggle': 'tooltip',
             'data-bs-placement': 'top',
@@ -148,16 +166,30 @@ function addProductToCart(event) {
         $(button).tooltip();
     }
     else {
-        button.innerHTML = `Added <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-        </svg>`;
-        button.classList.add('added');
-        setTimeout(function () {
-            button.textContent = 'Add to Cart';
-            button.classList.remove('added');
-        }, 1000);
-        navbarBadge.style.display = 'flex';
-        myCart.push(productID);
+        fetch('/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Request-Type': 'addtocart'
+            },
+            body: JSON.stringify(productID)
+        }).then(response => response.json())
+        .then(data => {
+            if(data.addtocart_success) {
+                button.innerHTML = `Added <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                </svg>`;
+                button.classList.add('added');
+                setTimeout(function () {
+                    button.textContent = 'Add to Cart';
+                    button.classList.remove('added');
+                }, 500);
+                // navbarBadge.style.display = 'flex';
+                event.target.closest('.card').querySelector('.total-quantity').textContent = data.in_stock;
+            } else {
+                window.alert(data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
-    cartBadge.innerHTML = myCart.length;
 }

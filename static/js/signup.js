@@ -124,7 +124,7 @@ function validateForms() {
       password: password.value
     };
     
-    fetch('/signup', {
+    fetch('/profile', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
@@ -138,6 +138,9 @@ function validateForms() {
       if(!data.signup_success) {
         document.getElementById('popOverLabel').innerHTML = 'Failed!';
         document.getElementById('popover-message').innerHTML = 'Registration Un-successful! Try Again!';
+        document.getElementById('popover-close').addEventListener('click', () => {
+          window.location.reload();
+        });
       } else {
         document.getElementById('popOverLabel').innerHTML = 'Success!';
         document.getElementById('popover-message').innerHTML = 'Registration successful! Your registration was successful. Thank you!';
@@ -162,7 +165,7 @@ function closebutton() {
 }
 
 function loginValidation() {
-  debugger
+  // debugger
   var email = document.getElementById("loginEmail").value;
   var password = document.getElementById("loginPassword").value;
   var isError = false;
@@ -191,7 +194,7 @@ function loginValidation() {
       email: email,
       password: password
     };
-    fetch('/signup', {
+    fetch('/profile', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',

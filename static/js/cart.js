@@ -1,4 +1,4 @@
-import { gym_data_list, yoga_data_list, supplements_data_list } from "./data.js";
+import { gym_data_list, yoga_data_list, supplements_data_list } from "../js/data.js";
 var gym_products = gym_data_list;
 var yoga_products = yoga_data_list;
 var supplement_products = supplements_data_list;
@@ -8,11 +8,8 @@ var quantity = [];
  
 
 
-document.addEventListener('DOMContentLoaded',function(){
-    var queryString = window.location.search;
-    var params = new URLSearchParams(queryString);
-    var arrayString = params.get('index_page_selected_products');   
-    var index_page_selected_products = JSON.parse(arrayString);
+document.addEventListener('DOMContentLoaded',function(){ 
+    var index_page_selected_products = cart_data;
     var countedNames = []; // Array to keep track of counted names
     
     for (var i = 0; i < index_page_selected_products.length; i++) {
@@ -108,7 +105,7 @@ document.addEventListener('DOMContentLoaded',function(){
                 }
             });
 
-            // prohibits the user to enter more than quantity and 0
+            // prohibits the user to enter more than quantity and lessthan 0
             var cartQtyInputs = document.querySelectorAll('.cart-qty');
 
             cartQtyInputs.forEach(function(cartQtyInput) {
@@ -158,6 +155,91 @@ document.addEventListener('DOMContentLoaded',function(){
         
        
     }    
+
+    var btn_submit = document.getElementById('btn_submit');
+
+    btn_submit.addEventListener('click', function(){
+
+        
+
+       // Get form input values
+        var fullName = document.getElementById('fullName').value.trim();
+        var address = document.getElementById('address').value.trim();
+        var city = document.getElementById('city').value.trim();
+        var province = document.getElementById('province').value.trim();
+        var postalCode = document.getElementById('postalCode').value.trim();
+        var phone = document.getElementById('phone').value.trim();
+
+        var fullNameValidation = document.getElementById('fname_v');
+        var addressValidation = document.getElementById('add_v');
+        var cityValidation = document.getElementById('city_v');
+        var provinceValidation = document.getElementById('province_v');
+        var postalCodeValidation = document.getElementById('pos_v');
+        var phoneValidation = document.getElementById('mob_v');
+
+        fullNameValidation.textContent = '';
+        addressValidation.textContent = '';
+        cityValidation.textContent = '';
+        provinceValidation.textContent = '';
+        postalCodeValidation.textContent = '';
+        phoneValidation.textContent = '';
+
+        var validation = true;
+
+        // Validate Full Name
+        if (fullName === '') {
+            fullNameValidation.textContent = 'Please enter your full name';
+            validation = false;
+            
+        } else {
+            fullNameValidation.textContent = '';
+        }
+
+        // Validate Address
+        if (address === '') {
+            addressValidation.textContent = 'Please enter your address';
+            validation = false;
+        } else {
+            addressValidation.textContent = '';
+        }
+
+        // Validate City
+        if (city === '') {
+            cityValidation.textContent = 'Please enter your city';
+            validation = false;
+        } else {
+            cityValidation.textContent = '';
+        }
+
+        // Validate Province
+        if (province === '') {
+            provinceValidation.textContent = 'Please enter your province';
+            validation = false;
+        } else {
+            provinceValidation.textContent = '';
+        }
+        // Validate Postal Code
+        var postalCodeRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+        if (postalCode === '' || !postalCodeRegex.test(postalCode)) {
+            postalCodeValidation.textContent = 'Please enter a valid postal code (e.g., A1A 1A1)';
+            validation = false;
+        } else {
+            postalCodeValidation.textContent = '';
+        }
+        // Validate Phone Number
+        var phoneRegex = /^\d{10}$/;
+        if (phone === '' || !phoneRegex.test(phone)) {
+            phoneValidation.textContent = 'Please enter a valid 10-digit phone number';
+            validation = false;
+        } else {
+            phoneValidation.textContent = '';
+        }
+        if(validation == true){
+            $('#fullNameModal').modal('show');
+        }
+    });
+
+    document.getElementById('nav_login_button').addEventListener("click", () => toggleValidation());
 });
 
 // 1 -- function to check weather the cart is empty or not
@@ -220,7 +302,6 @@ function createCards(data, index){
                             <span>
                             <label for="cart_qty">Qty:</label>
                             <input type="number" id="cart_qty" class="cart-qty" min="1" max="${data.total_quantity}" value="${quantity[index]}">
-                            <p>In stock: ${data.total_quantity}</p>
                             </span>
                             <span>
                                 <i class="bi bi-trash3 fs-4 p-2 bg delete_cart_product" data-toggle="tooltip" data-placement="bottom" title="Delete from the cart"></i>
@@ -290,11 +371,13 @@ function changed_qty(){
     // total_product.innerHTML = total_count;
     
 }
-
-
-// quantity generation
-
-
-
-  
-  //------------------------------------
+//Urvesh Patel
+function toggleValidation() {
+    var isValid = sessionStorage.getItem("isValid");
+    // If isValid is null or false, redirect to signup.html
+    if (!isValid || isValid === "false") {
+        window.location.href = '../html/signup.html';
+    } else {
+        window.location.href = '../html/details.html';
+    }
+}
