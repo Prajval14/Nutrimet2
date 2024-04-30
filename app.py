@@ -241,10 +241,14 @@ def product_detail(product_id):
 @app.route('/mycart', methods=['GET', 'POST'])
 def mycart():
     if request.method == 'GET':
-        if(len(cart.items) > 0):
-            return render_template('/html/cart.html', cart_items=cart.items)
-        else:
-            return jsonify({'is_cart_empty': True})
+        gym_products = get_products('gym')
+        yoga_products = get_products('yoga')
+        supplements_products = get_products('sup')
+        return render_template('/html/cart.html', 
+                                cart_items=cart.items,
+                                gym_products=get_json_data(gym_products),
+                                yoga_products=get_json_data(yoga_products),
+                                supplements_products=get_json_data(supplements_products))
     elif request.method == 'POST':
         data = request.json
         cart.items = data
