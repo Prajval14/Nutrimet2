@@ -1,12 +1,57 @@
 body {
-  background-image: url('../../static/images/test.jpg');
+
   
 }
+
+#leftSide {
+  background-image: url('../../static/images/signup_page.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .form-container {
-  background-color:#0e0c0c;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color:white;
+  /* border-radius: 8px; */
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
   padding: 30px;
-  color: #ffffff;
+  /* color: #ffffff; */
   
+}
+
+
+.input-group-append{
+  height: 38px !important;
+  background-color: #e9ecef;
+  color: black;
+}
+
+.input-group-append :hover{
+  background-color: #e9ecef;
+  color: black;
+}
+.input-group-append :active{
+  background-color: transparent;
+}
+
+#updateButton {
+  background-color: white;
+  color: #054F98;
+  border: 2px solid #054F98;
+  border-radius: 50px;
+}
+
+#updateButton:hover {
+  background-color: #054F98;
+  color: white;
+}
+
+#logout_button {
+  background-color: white;
+  color: red;
+  border: 2px solid red;
+  border-radius: 50px;
+}
+
+#logout_button:hover {
+  background-color: red;
+  color: white;
 }
