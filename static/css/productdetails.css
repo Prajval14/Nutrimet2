@@ -68,22 +68,10 @@ h5 {
   display: block;
 }
 
-.delivery_cards .text {
-  margin-left: 16px;
-  text-align: center;
-}
-
-.delivery_cards {
-  width: 100%;
-  margin: 4px 0;
-  background-color: #282828;
-  color: white;
-
-}
-
-.delivery_cards span{
-  font-size: 40px;
-  padding-left: 50%;
+.t_qty{
+  margin-top: 10px;
+  font-size: 14px;
+  color: gray;
 }
 
 @media only screen and (max-width:768px) {
@@ -104,5 +92,12 @@ h5 {
   .container {
     flex-direction: column;
   }
+
+  
 }
 
+@media only screen and (max-width:575.5px) {
+  .card_static{
+    text-align: center;
+  }
+}
