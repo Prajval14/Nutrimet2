@@ -1,4 +1,4 @@
-import { gym_data_list, yoga_data_list, supplements_data_list } from "../js/data.js";
+// import { gym_data_list, yoga_data_list, supplements_data_list } from "../js/data.js";
 var gym_products = gym_data_list;
 var yoga_products = yoga_data_list;
 var supplement_products = supplements_data_list;
@@ -9,17 +9,16 @@ var quantity = [];
 
 
 document.addEventListener('DOMContentLoaded',function(){ 
-    var index_page_selected_products = cart_data;
     var countedNames = []; // Array to keep track of counted names
     
-    for (var i = 0; i < index_page_selected_products.length; i++) {
-        var productName = index_page_selected_products[i];
+    for (var i = 0; i < cart_data.length; i++) {
+        var productName = cart_data[i];
         
         // Check if the name has already been counted
         if (!countedNames.includes(productName)) {
             var count = 0;
-            for (var j = 0; j < index_page_selected_products.length; j++) {
-                if (index_page_selected_products[j] === productName) {
+            for (var j = 0; j < cart_data.length; j++) {
+                if (cart_data[j] === productName) {
                     count++;
                 }
             }
@@ -45,8 +44,8 @@ document.addEventListener('DOMContentLoaded',function(){
 
 
     // 1 -- checking weather the cart is empty or not
-    if(index_page_selected_products.length <1){
-        check_empty_cart(index_page_selected_products);
+    if(cart_data.length <1){
+        check_empty_cart(cart_data);
         var checkoutbtn = document.getElementById('btn_checkout');
         checkoutbtn.addEventListener('click', function(){
             document.getElementById('footer').classList.toggle('fixed-bottom');
@@ -60,16 +59,16 @@ document.addEventListener('DOMContentLoaded',function(){
         //if cart is not empty then this code will be executed.
         display_products(countedNames);
         total_price();
-        let proxy = new Proxy(countedNames, {
-        get(target, property, receiver) {
-            if (property === 'splice') {
-                return function (...args) {
-                    return Reflect.apply(target[property], target, args);
-                }
-            }
-            return Reflect.get(target, property, receiver);
-        }
-        });
+        // let proxy = new Proxy(countedNames, {
+        // get(target, property, receiver) {
+        //     if (property === 'splice') {
+        //         return function (...args) {
+        //             return Reflect.apply(target[property], target, args);
+        //         }
+        //     }
+        //     return Reflect.get(target, property, receiver);
+        // }
+        // });
         var list_product1 = document.querySelectorAll('.product_card');
         list_product1.forEach(function(button){
             button.addEventListener('click', function(){
@@ -78,7 +77,7 @@ document.addEventListener('DOMContentLoaded',function(){
                 for (var i = 0; i < delete_btn.length; i++) {
                     (function(index) {
                         delete_btn[index].addEventListener('click', function() {
-                            proxy.splice(index, 1);
+                            // proxy.splice(index, 1);
                                 list_product[index].remove();
                                 total_price();
 
@@ -301,7 +300,7 @@ function createCards(data, index){
                         <div class="d-flex justify-content-between align-items-end mt-auto"  id="edit-product-cart">
                             <span>
                             <label for="cart_qty">Qty:</label>
-                            <input type="number" id="cart_qty" class="cart-qty" min="1" max="${data.total_quantity}" value="${quantity[index]}">
+                            <input type="number" id="cart_qty" class="cart-qty" min="1" max="${data.totalquantity}" value="${quantity[index]}">
                             </span>
                             <span>
                                 <i class="bi bi-trash3 fs-4 p-2 bg delete_cart_product" data-toggle="tooltip" data-placement="bottom" title="Delete from the cart"></i>
@@ -314,9 +313,9 @@ function createCards(data, index){
         <hr>
      `;
     cartProductContainer.appendChild(cardDiv);
-    //Handling on click event for product images 
+    //Handling on click event for product images - navigate to product details page
     document.getElementById(`product_image_${data.productid}`).addEventListener("click", (event) => {
-        window.location.href = `../html/productdetails.html?selected_product=${JSON.stringify(data.productid)}`;
+        window.location.href = '/product/' + data.productid;
     });
 }
 
