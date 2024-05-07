@@ -33,6 +33,7 @@
     <script type="module" src="/static/js/common.js"></script>
     <script type="module" src="/static/js/index.js"></script>
     <script>
+        // debugger
         let gym_data_list = {{ gym_products | safe }};
         let yoga_data_list = {{ yoga_products | safe }};
         let supplements_data_list = {{ supplements_products | safe }};
@@ -52,7 +53,8 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbar_supported_content" aria-controls="navbar_supported_content"
                 aria-expanded="false" aria-label="Toggle navigation">
-                <span class="position-absolute translate-middle p-2 bg-danger border border-light rounded-circle" id="navbar_toggler_icon_badge"></span>
+                <span class="position-absolute translate-middle p-2 bg-danger border border-light rounded-circle"
+                    id="navbar_toggler_icon_badge"></span>
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbar_supported_content">
@@ -71,12 +73,15 @@
                     </li>
                 </ul>
                 <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search_input">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                        id="search_input">
                 </form>
                 <div class="btn-group align-items-center d-flex" role="group" id="nav_icons">
                     <button type="button" class="btn" id="nav_cart_button">
                         <i class="bi bi-cart2 fs-3"></i>
-                        <span class="position-absolute top-0 start-90 translate-middle badge rounded-pill bg-danger mt-2" id="cart_items_badge"></span>
+                        <span
+                            class="position-absolute top-0 start-90 translate-middle badge rounded-pill bg-danger mt-2"
+                            id="cart_items_badge"></span>
                         <a id="nav_cart" class="ps-2 text-decoration-none"></a>
                     </button>
                     <button type="button" class="btn" id="nav_login_button">

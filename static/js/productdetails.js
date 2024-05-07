@@ -1,30 +1,29 @@
-const selected_product = JSON.parse(new URLSearchParams(window.location.search).get('selected_product') ?? 'null');
-// console.log(selected_product);
-//debugger
-import { gym_data_list, yoga_data_list, supplements_data_list } from './data.js';
-
-
 const navbarBadge = document.getElementById("navbar_toggler_icon_badge");
 const cartBadge = document.getElementById("cart_items_badge");
-
-//Declaring empty array to send data to add to cart page
 const myCart = [];
 
 document.addEventListener('DOMContentLoaded', function() {
-// Combine all product lists into one array
-const allProducts = [...gym_data_list, ...yoga_data_list, ...supplements_data_list];
+    createCards(product_info[0]);
 
-// Find the product with the matching name
-const product = allProducts.find(prod => prod.productid === selected_product);
-    //debugger
-    createCards(product);
+    var cartQtyInput = document.getElementById('cart_qty');
+    var initialValue = cartQtyInput.value;
+    var currentMax = parseInt(cartQtyInput.getAttribute('max'));
     
-})
+    cartQtyInput.addEventListener('change', function () {
+        // If the input value is empty, not a number, less than 1, or greater than the max value, reset it to the initial value
+        if (!isValidNumber(cartQtyInput.value) || parseInt(cartQtyInput.value) < 1 || parseInt(cartQtyInput.value) > currentMax) {
+            cartQtyInput.value = initialValue;
+        }
+    });
+
+    function isValidNumber(value) {
+        return !isNaN(parseFloat(value)) && isFinite(value);
+    }
+});
 
 const gymContainer = document.getElementById('product_detail_container');
 
-//Functions defined
-function createCards(product) {    
+function createCards(product) {
     const cardDiv = document.createElement('div');
     cardDiv.className = 'container';
     gymContainer.innerHTML = `
@@ -64,14 +63,11 @@ function createCards(product) {
         <hr>
         <p>${product.productdetail}</p>
         <div class="rating">${product.rating + ' ' + generateStarRating(product.rating)}</div><br>
-        <label>Quantity:&nbsp;&nbsp;</label><select class="quantity-select">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
+        <label>Quantity:&nbsp;&nbsp;
         </select>
-        <button class="add_to_cart_button">Add to cart</button>
+        <input type="number" id="cart_qty" class="quantity-select" min="1" max="${product.totalquantity}" value="1">
+        <p class="t_qty" >Total Quanity: <span id="single_product_total_quantity"> ${product.totalquantity}</span></p>
+        <button class="add_to_cart_button" id="add_to_cart_btn">Add to cart</button>
     </div>
     `;
 
@@ -80,14 +76,25 @@ function createCards(product) {
 
 // Handling navbar cart and sign up on click event
 document.getElementById('nav_cart_button').addEventListener("click", () => window.location.href = './html/cart.html?index_page_selected_products=' + JSON.stringify(myCart));
-document.getElementById('nav_login_button').addEventListener("click", () => toggleValidation());
-
-
-
 
 function handleAddToCart() {
     const addToCartButtons = document.querySelectorAll('.add_to_cart_button');
-    addToCartButtons.forEach(button => button.addEventListener("click", (event) => addProductToCart(event)));
+    // addToCartButtons.forEach(button => button.addEventListener("click", (event) => addProductToCart(event)));
+    addToCartButtons.forEach(button => {
+        button.addEventListener("click", (event) => {
+            var total_qty = document.getElementById('single_product_total_quantity');
+            var selected_qty = document.getElementById('cart_qty');
+            var selected_qty_value = parseInt(selected_qty.value);
+
+            if (parseInt(total_qty.textContent) > 0 && (parseInt(total_qty.textContent) - selected_qty_value) >= 0) {
+                addProductToCart(event); // Call the function you already have
+                total_qty.textContent = parseInt(total_qty.textContent) - selected_qty_value;
+                selected_qty.setAttribute('max', parseInt(total_qty.textContent));
+            } else {
+                alert('Quantity is not available as per your request');
+            }
+        });
+    });
 }
 
 function addProductToCart(event) {
@@ -99,12 +106,12 @@ function addProductToCart(event) {
     button.innerHTML = `Added <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
       </svg>`;
-    button.classList.add('added');  
+    button.classList.add('added');
     setTimeout(function () {
-      button.textContent = 'Add to Cart';
-      button.classList.remove('added');
+        button.textContent = 'Add to Cart';
+        button.classList.remove('added');
     }, 1000);
-  
+
     //Add product ID to cart and a list 
     const productID = selected_product;
     for (let i = 0; i < selectedQuantity; i++) {
@@ -112,35 +119,34 @@ function addProductToCart(event) {
     }
     navbarBadge.style.display = 'flex';
     cartBadge.innerHTML = myCart.length;
-  }
+}
 
 function generateStarRating(rating) {
     const starTotal = 5;
     const roundedRating = Math.round(parseFloat(rating));
     let starHTML = "";
     for (let i = 0; i < starTotal; i++) {
-      starHTML += i < roundedRating ? "⭐" : "☆";
+        starHTML += i < roundedRating ? "⭐" : "☆";
     }
     return starHTML;
-  }
+}
 
-  document
-  .getElementById("nav_cart_button")
-  .addEventListener(
-    "click",
-    () =>
-    (window.location.href =
-      "./cart.html?index_page_selected_products=" + JSON.stringify(myCart))
-  );
-
-  //toggle validation
-  function toggleValidation() {
+//toggle validation
+function toggleValidation() {
     var isValid = sessionStorage.getItem("isValid");
     // If isValid is null or false, redirect to signup.html
     if (!isValid || isValid === "false") {
-        window.location.href = './html/signup.html';
+        window.location.href = '../html/signup.html';
     } else {
-        window.location.href = './html/details.html';
+        window.location.href = '../html/details.html';
     }
 }
 
+document
+    .getElementById("nav_cart_button")
+    .addEventListener(
+        "click",
+        () =>
+        (window.location.href =
+            "./cart.html?index_page_selected_products=" + JSON.stringify(myCart))
+    );

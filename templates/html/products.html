@@ -126,7 +126,11 @@
         }
         }
       </style>
-      
+        <script>
+            let gym_data_list = {{ gym_products | safe }};
+            let yoga_data_list = {{ yoga_products | safe }};
+            let supplements_data_list = {{ supplements_products | safe }};
+        </script>
 </head>
 
 <body>
@@ -146,16 +150,16 @@
             <div class="collapse navbar-collapse" id="navbar_supported_content">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-bold">
                     <li class="nav-item">
-                        <a class="nav-link w-100" aria-current="page" href="/aboutus">About</a>
+                        <a class="nav-link w-100" aria-current="page" href="./aboutus.html">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link w-100" aria-current="page" href="/products">Gym Accessories</a>
+                        <a class="nav-link w-100" aria-current="page" href="./products.html">Gym Accessories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link w-100" aria-current="page" href="/products">Yoga Equipments</a>
+                        <a class="nav-link w-100" aria-current="page" href="./products.html">Yoga Equipments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link w-100" aria-current="page" href="/products">Supplements</a>
+                        <a class="nav-link w-100" aria-current="page" href="./products.html">Supplements</a>
                     </li>
                 </ul>
                 <form class="d-flex" role="search">

@@ -27,7 +27,10 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
   <script src="../../static/js/common.js"></script>
   <script type="module" src="../../static/js/productdetails.js"></script>
-
+  <script>
+    // debugger
+    let product_info = {{ product | safe }};
+    </script>
 </head>
 
 <body>
@@ -87,65 +90,108 @@
 
     
     <div class="section_2">
-        <div class="delivery_policy">
-            <hr>
-                <p><b>Get delivered in</b> : 4 days<br>
-                <b>Delivery Policy</b></p>
-                <ul>
-                    <li>We strive to process and dispatch all orders within 48 hours of receiving them, excluding weekends and holidays.</li>
-                    <li>Customers will receive a confirmation email with tracking information once the order has been shipped. Please note that delivery times may vary based on the shipping destination.</li>
-                    <li>In the event of a delay or unforeseen circumstances affecting delivery, our customer service team will promptly notify you and provide updates on the status of your order.</li>
-                    <li>We are committed to ensuring the safe and timely delivery of your purchases. If you encounter any issues with your delivery, please contact our customer support team at nutrimet@gmail.com for assistance.</li>
-                </ul>
+        <div class="row">
+            <div class="delivery_policy">
+                <hr>
+                    <p><b>Get delivered in</b> : 4 days<br>
+                    <b>Delivery Policy</b></p>
+                    <ul>
+                        <li>We strive to process and dispatch all orders within 48 hours of receiving them, excluding weekends and holidays.</li>
+                        <li>Customers will receive a confirmation email with tracking information once the order has been shipped. Please note that delivery times may vary based on the shipping destination.</li>
+                        <li>In the event of a delay or unforeseen circumstances affecting delivery, our customer service team will promptly notify you and provide updates on the status of your order.</li>
+                        <li>We are committed to ensuring the safe and timely delivery of your purchases. If you encounter any issues with your delivery, please contact our customer support team at nutrimet@gmail.com for assistance.</li>
+                    </ul>
+            </div>
         </div>
         
-        <div class="return_policy">
-            <hr>
-            <p><strong>Return Policy</strong></p>
-            <ul>
-                <li>Items may be returned within 30 days of purchase, provided they are unused and in their original packaging.</li>
-                <li>To initiate a return, please contact our customer service team to obtain a Return Authorization (RA) number.</li>
-                <li>Refunds will be processed once the returned item is received and inspected, and customers will be notified via email.</li>
-                <li>Certain items, such as personalized or custom-made products, are non-returnable unless there is a defect or error on our part.</li>
-            </ul>
+        <div class="row">
+            <div class="return_policy">
+                <hr>
+                <p><strong>Return Policy</strong></p>
+                <ul>
+                    <li>Items may be returned within 30 days of purchase, provided they are unused and in their original packaging.</li>
+                    <li>To initiate a return, please contact our customer service team to obtain a Return Authorization (RA) number.</li>
+                    <li>Refunds will be processed once the returned item is received and inspected, and customers will be notified via email.</li>
+                    <li>Certain items, such as personalized or custom-made products, are non-returnable unless there is a defect or error on our part.</li>
+                </ul>
+            </div>    
         </div>
+        <hr>
+        <div class="row">
+        
         
         <div class="delivery_image" >
-            <!-- Cards for additional information -->   
-            <div class="delivery_cards">
-                <span class="bi bi-truck"></span>
-                <div class="text">
-                    <p>Free Shipping</p>
-                    <p>Over $50</p>
+            
+        <div class="delivery_image" >
+                <!-- Cards for additional information --> 
+
+                <div class="col-sm-6 col-md-6 col-lg-3 mt-2">
+                    <div class="card bg-dark" >
+                        <div class="row" style="padding: 10px 0;">
+                            <div class="col-sm-4 text-center">
+                                <span class="bi bi-truck align-items-center" style="font-size: 35px; color: white;"></span>
+                            </div>
+
+                            <div class="col-sm-8">
+                                <div class="text" style="color: white; font-size: 20px;">
+                                    <p class="card_static" style="margin-bottom: 0; font-size: 15px;">Free Shipping</p>
+                                    <p class="card_static" style="margin-bottom: 0; font-size: 15px;">Over $50</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="col-sm-6 col-md-6 col-lg-3 mt-2">
+                    <div class="card bg-dark" >
+                        <div class="row" style="padding: 10px 0;">
+                            <div class="col-sm-4 text-center">
+                                <span class="bi bi-shop align-items-center" style="font-size: 35px; color: white;"></span>
+                            </div>
 
-            <div class="delivery_cards">
-                <span class="bi bi-shop"></span>
-                <div class="text">
-                    <p>Visit</p>
-                    <p>Our Stores</p>
+                            <div class="col-sm-8">
+                                <div class="text" style="color: white; font-size: 20px;">
+                                    <p class="card_static" style="margin-bottom: 0; font-size: 15px;">Visit</p>
+                                    <p class="card_static" style="margin-bottom: 0; font-size: 15px;">Our Stores</p>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
                 </div>
-            </div>
 
-            <div class="delivery_cards">
-                <span class="bi bi-arrow-counterclockwise"></span>
-                <div class="text">
-                    <p>30 Days</p>
-                    <p>Return</p>
+                <div class="col-sm-6 col-md-6 col-lg-3 mt-2">
+                    <div class="card bg-dark" >
+                        <div class="row" style="padding: 10px 0;">
+                            <div class="col-sm-4 text-center">
+                                <span class="bi bi-arrow-counterclockwise align-items-center" style="font-size: 35px; color: white;"></span>
+                            </div>
+
+                            <div class="col-sm-8">
+                                <div class="text" style="color: white; font-size: 20px;">
+                                    <p class="card_static" style="margin-bottom: 0; font-size: 15px;">30 Days</p>
+                                    <p class="card_static" style="margin-bottom: 0; font-size: 15px;">Return</p>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
                 </div>
-            </div>
 
-            <div class="delivery_cards">
-                <span class="bi bi-person-check-fill"></span>
-                <div class="text">
-                    <p>Maximum</p>
-                    <p>Support</p>
+                <div class="col-sm-6 col-md-6 col-lg-3 mt-2">
+                    <div class="card bg-dark" >
+                        <div class="row" style="padding: 10px 0;">
+                            <div class="col-sm-4 text-center">
+                                <span class="bi bi-person-check-fill align-items-center" style="font-size: 35px; color: white;"></span>
+                            </div>
+
+                            <div class="col-sm-8">
+                                <div class="text" style="color: white; font-size: 20px;">
+                                    <p class="card_static" style="margin-bottom: 0; font-size: 15px;">Maximum</p>
+                                    <p class="card_static" style="margin-bottom: 0; font-size: 15px;">Support</p>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
                 </div>
-            </div>
-
-
-        </div>
+        </div> 
     </div>
 
  <footer class="d-flex flex-column justify-content-center text-center">
@@ -161,9 +207,6 @@
         </p>
     </div>
 </footer>
-
- 
-
 </body>
 
 </html>
